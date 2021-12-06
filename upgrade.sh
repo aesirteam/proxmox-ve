@@ -10,7 +10,7 @@ rm -f /etc/apt/sources.list.d/pve-enterprise.list
 echo "deb http://download.proxmox.com/debian/pve $(. /etc/os-release && echo "$VERSION_CODENAME") pve-no-subscription" >/etc/apt/sources.list.d/pve.list
 
 # switch the apt mirror from us to nl.
-sed -i -E 's,ftp\.us\.debian,ftp..debian,' /etc/apt/sources.list
+sed -i -E 's,ftp\.us\.debian,ftp.cn.debian,' /etc/apt/sources.list
 
 # upgrade.
 apt-get update
