@@ -8,16 +8,17 @@ fqdn=$(hostname --fqdn)
 export DEBIAN_FRONTEND=noninteractive
 
 # make sure the local apt cache is up to date.
-while true; do
-    apt-get update && break || sleep 5
-done
+# while true; do
+#     apt-get update && break || sleep 5
+# done
 
 # extend the main partition to the end of the disk
 # and extend the pve/data logical volume to use all
 # the free space.
-apt-get install -y cloud-guest-utils
+# apt-get install -y cloud-guest-utils
 if growpart /dev/[vs]da 3; then
     pvresize /dev/[vs]da3
+    lvextend -L +20G --resizefs /dev/pve/root
     lvextend --extents +100%FREE /dev/pve/data
 fi
 
@@ -28,10 +29,13 @@ auto lo
 iface lo inet loopback
 
 auto eth0
-iface eth0 inet dhcp
+iface eth0 inet manual
 
 auto eth1
 iface eth1 inet manual
+
+auto eth2
+iface eth2 inet dhcp
 
 auto vmbr0
 iface vmbr0 inet static
@@ -43,8 +47,8 @@ iface vmbr0 inet static
     # enable IP forwarding. needed to NAT and DNAT.
     post-up   echo 1 >/proc/sys/net/ipv4/ip_forward
     # NAT through eth0.
-    post-up   iptables -t nat -A POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth0 -j MASQUERADE
-    post-down iptables -t nat -D POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth0 -j MASQUERADE
+    post-up   iptables -t nat -A POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth2 -j MASQUERADE
+    post-down iptables -t nat -D POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth2 -j MASQUERADE
 EOF
 sed -i -E "s,^[^ ]+( .*pve.*)\$,$ip\1," /etc/hosts
 sed 's,\\,\\\\,g' >/etc/issue <<'EOF'
@@ -73,15 +77,15 @@ killall agetty | true # force them to re-display the issue file.
 echo 'Proxmox.Utils.checked_command = function(o) { o(); };' >>/usr/share/pve-manager/js/pvemanagerlib.js
 
 # install vim.
-apt-get install -y --no-install-recommends vim
-cat >/etc/vim/vimrc.local <<'EOF'
-syntax on
-set background=dark
-set esckeys
-set ruler
-set laststatus=2
-set nobackup
-EOF
+# apt-get install -y --no-install-recommends vim
+# cat >/etc/vim/vimrc.local <<'EOF'
+# syntax on
+# set background=dark
+# set esckeys
+# set ruler
+# set laststatus=2
+# set nobackup
+# EOF
 
 # configure the shell.
 cat >/etc/profile.d/login.sh <<'EOF'

@@ -56,7 +56,8 @@ EOF
 dpkg-reconfigure keyboard-configuration
 
 # set the timezone.
-ln -fs /usr/share/zoneinfo/Europe/Lisbon /etc/localtime
+# ln -fs /usr/share/zoneinfo/Europe/Lisbon /etc/localtime
+ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 dpkg-reconfigure tzdata
 
 # reboot.
