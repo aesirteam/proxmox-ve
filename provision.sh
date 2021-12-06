@@ -15,7 +15,7 @@ for pve_kernel in $pve_kernels; do
 done
 
 # create a group where sudo will not ask for a password.
-apt-get install -q -y sudo
+apt-get install -q -y sudo cloud-guest-utils
 groupadd -r admin
 echo '%admin ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers.d/admin
 
@@ -27,7 +27,10 @@ gpasswd -a vagrant admin
 chmod 750 /home/vagrant
 install -d -m 700 /home/vagrant/.ssh
 pushd /home/vagrant/.ssh
-wget -q --no-check-certificate https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O authorized_keys
+# wget -q --no-check-certificate https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O authorized_keys
+cat > authorized_keys << 'EOF'
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key
+EOF
 chmod 600 authorized_keys
 chown -R vagrant:vagrant .
 popd
@@ -55,6 +58,16 @@ else
 # install the qemu-kvm Guest Additions.
 apt-get install -y qemu-guest-agent spice-vdagent
 fi
+
+apt-get install -y --no-install-recommends vim
+cat >/etc/vim/vimrc.local <<'EOF'
+syntax on
+set background=dark
+set esckeys
+set ruler
+set laststatus=2
+set nobackup
+EOF
 
 # install rsync and sshfs to support shared folders in vagrant.
 apt-get install -y rsync sshfs

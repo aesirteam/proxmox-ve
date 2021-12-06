@@ -1,16 +1,21 @@
 ENV['VAGRANT_EXPERIMENTAL'] = 'typed_triggers'
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'proxmox-ve-amd64'
-  #config.vm.box = 'proxmox-ve-uefi-amd64'
+  # config.vm.box = 'proxmox-ve-amd64/7'
+  config.vm.box = 'proxmox-ve-uefi-amd64/7'
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.provision :file, source: '.', destination: '$HOME/'
   config.vm.provider :libvirt do |lv, config|
-    lv.memory = 2*1024
-    lv.cpus = 4
+    lv.memory = 16*1024
+    lv.cpus = 8
     lv.cpu_mode = 'host-passthrough'
     lv.nested = true
     lv.keymap = 'pt'
-    lv.machine_virtual_size = 30
-    config.vm.synced_folder '.', '/vagrant', type: 'nfs', nfs_version: '4.2', nfs_udp: false
+    lv.machine_virtual_size = 160
+
+    lv.management_network_name = 'mgmt'
+    lv.management_network_address = '10.0.0.0/24'
+    lv.management_network_mode = 'none'
   end
   config.vm.provider :virtualbox do |vb|
     vb.linked_clone = true
@@ -56,8 +61,13 @@ Vagrant.configure('2') do |config|
     auto_config: false,
     libvirt__dhcp_enabled: false,
     libvirt__forward_mode: 'none'
+  config.vm.network :public_network,
+    dev: 'virbr0',
+    mode: 'bridge',
+    type: 'bridge',
+    use_dhcp_assigned_default_route: true
   config.vm.provision :shell, path: 'provision.sh', args: ip
   config.vm.provision :shell, path: 'provision-pveproxy-certificate.sh', args: ip
-  config.vm.provision :shell, path: 'provision-containers.sh', args: ip
+  # config.vm.provision :shell, path: 'provision-containers.sh', args: ip
   config.vm.provision :shell, path: 'summary.sh', args: ip
 end
