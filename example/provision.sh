@@ -46,7 +46,7 @@ iface vmbr0 inet static
     bridge_fd 0
     # enable IP forwarding. needed to NAT and DNAT.
     post-up   echo 1 >/proc/sys/net/ipv4/ip_forward
-    # NAT through eth0.
+    # NAT through eth2.
     post-up   iptables -t nat -A POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth2 -j MASQUERADE
     post-down iptables -t nat -D POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth2 -j MASQUERADE
 EOF
