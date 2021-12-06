@@ -29,13 +29,10 @@ auto lo
 iface lo inet loopback
 
 auto eth0
-iface eth0 inet manual
+iface eth0 inet dhcp
 
 auto eth1
 iface eth1 inet manual
-
-auto eth2
-iface eth2 inet dhcp
 
 auto vmbr0
 iface vmbr0 inet static
@@ -46,9 +43,9 @@ iface vmbr0 inet static
     bridge_fd 0
     # enable IP forwarding. needed to NAT and DNAT.
     post-up   echo 1 >/proc/sys/net/ipv4/ip_forward
-    # NAT through eth2.
-    post-up   iptables -t nat -A POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth2 -j MASQUERADE
-    post-down iptables -t nat -D POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth2 -j MASQUERADE
+    # NAT through eth0.
+    post-up   iptables -t nat -A POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth0 -j MASQUERADE
+    post-down iptables -t nat -D POSTROUTING -s '$ip/24' ! -d '$ip/24' -o eth0 -j MASQUERADE
 EOF
 sed -i -E "s,^[^ ]+( .*pve.*)\$,$ip\1," /etc/hosts
 sed 's,\\,\\\\,g' >/etc/issue <<'EOF'
