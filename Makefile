@@ -11,7 +11,7 @@ proxmox-ve-amd64-libvirt.box: *.sh proxmox-ve.json Vagrantfile.template
 		packer build -only=proxmox-ve-amd64-libvirt -on-error=abort -timestamp-ui proxmox-ve.json
 	@echo Box successfully built!
 	@echo to add it to vagrant run:
-	@echo vagrant box add -f proxmox-ve-amd64 $@
+	@echo vagrant box add -f proxmox-ve-amd64/6 $@
 
 proxmox-ve-amd64-virtualbox.box: *.sh proxmox-ve.json Vagrantfile.template
 	rm -f $@
@@ -19,7 +19,7 @@ proxmox-ve-amd64-virtualbox.box: *.sh proxmox-ve.json Vagrantfile.template
 		packer build -only=proxmox-ve-amd64-virtualbox -on-error=abort -timestamp-ui proxmox-ve.json
 	@echo Box successfully built!
 	@echo to add it to vagrant run:
-	@echo vagrant box add -f proxmox-ve-amd64 $@
+	@echo vagrant box add -f proxmox-ve-amd64/6 $@
 
 proxmox-ve-amd64-hyperv.box: *.sh proxmox-ve.json Vagrantfile.template
 	rm -f $@
@@ -28,7 +28,7 @@ proxmox-ve-amd64-hyperv.box: *.sh proxmox-ve.json Vagrantfile.template
 		packer build -only=proxmox-ve-amd64-hyperv -on-error=abort -timestamp-ui proxmox-ve.json
 	@echo BOX successfully built!
 	@echo to add to local vagrant install do:
-	@echo vagrant box add -f proxmox-ve-amd64 $@
+	@echo vagrant box add -f proxmox-ve-amd64/6 $@
 
 clean:
 	rm -rf packer_cache output-proxmox-ve*
