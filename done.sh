@@ -56,6 +56,4 @@ cat >/etc/motd <<'EOF'
 
 EOF
 
-
-echo y | pveceph install --version octopus
-touch /etc/ceph/ceph.conf
+rm -f /etc/profile.d/proxy.sh

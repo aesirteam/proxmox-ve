@@ -115,6 +115,9 @@ apt-get install -y dnsmasq
 systemctl stop dnsmasq
 systemctl disable dnsmasq
 
+echo y | pveceph install --version octopus
+touch /etc/ceph/ceph.conf
+
 # clean packages.
 apt-get -y autoremove
 apt-get -y clean

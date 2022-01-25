@@ -10,6 +10,17 @@ rm -f /etc/apt/sources.list.d/pve-enterprise.list
 echo "deb http://download.proxmox.com/debian/pve $(. /etc/os-release && echo "$VERSION_CODENAME") pve-no-subscription" >/etc/apt/sources.list.d/pve.list
 echo "export LC_ALL=C" >> /etc/profile
 
+cat > /etc/profile.d/proxy.sh <<'EOF'
+export HTTP_PROXY=http://192.168.122.1:8888
+export http_proxy=http://192.168.122.1:8888
+export HTTPS_PROXY=http://192.168.122.1:8888
+export https_proxy=http://192.168.122.1:8888
+export NO_PROXY="localhost,127.0.0.1,::1"
+export no_proxy="localhost,127.0.0.1,::1"
+EOF
+
+source /etc/profile
+
 # switch the apt mirror from us to nl.
 sed -i -E 's,ftp\.us\.debian,ftp.cn.debian,' /etc/apt/sources.list
 
