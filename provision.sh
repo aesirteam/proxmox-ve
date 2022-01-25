@@ -111,6 +111,10 @@ rm -f /var/lib/dbus/machine-id
 systemctl stop systemd-random-seed
 rm -f /var/lib/systemd/random-seed
 
+apt-get install -y dnsmasq
+systemctl stop dnsmasq
+systemctl disable dnsmasq
+
 # clean packages.
 apt-get -y autoremove
 apt-get -y clean
