@@ -4,6 +4,8 @@ set -euxo pipefail
 # configure apt for non-interactive mode.
 export DEBIAN_FRONTEND=noninteractive
 
+source /etc/profile
+
 # remove old kernel packages.
 # NB as of pve 5.2, there's a metapackage, pve-kernel-4.15, then there are the
 #    real kernels at pve-kernel-*-pve (these are the ones that are removed).
@@ -114,6 +116,9 @@ rm -f /var/lib/systemd/random-seed
 apt-get install -y dnsmasq
 systemctl stop dnsmasq
 systemctl disable dnsmasq
+
+echo y | pveceph install --version octopus
+touch /etc/ceph/ceph.conf
 
 # clean packages.
 apt-get -y autoremove
