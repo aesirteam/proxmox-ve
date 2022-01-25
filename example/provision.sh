@@ -132,8 +132,8 @@ pveversion -v
 lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
 
 # show the proxmox web address.
-cat <<EOF
-access the proxmox web interface at:
-    https://$ip:8006/
-    https://$fqdn:8006/
-EOF
+# cat <<EOF
+# access the proxmox web interface at:
+#     https://$ip:8006/
+#     https://$fqdn:8006/
+# EOF
