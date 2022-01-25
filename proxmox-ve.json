@@ -173,7 +173,8 @@
       "expect_disconnect": true,
       "scripts": [
         "upgrade.sh",
-        "provision.sh"
+        "provision.sh",
+        "done.sh"
       ]
     }
   ],
